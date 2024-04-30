@@ -2,12 +2,15 @@
 
 namespace frontend\modules\micuenta\controllers;
 
+use frontend\models\Informacionestudio;
+use frontend\models\Informacionlaboral;
 use Yii;
 use common\models\Persona;
 use common\models\search\PersonaSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use kartik\mpdf\Pdf;
 
 use mdm\admin\models\User;
 use frontend\models\search\DocumentoadjuntoSearch;
@@ -47,7 +50,7 @@ class PersonaController extends Controller
 
         $model = Persona::findOne(['username' => $username]);
 
-        if ($model){
+        if ($model) {
             $searchModel = new PersonaSearch();
             $dataProvider = $searchModel->search($this->request->queryParams, $model->id);
 
@@ -113,19 +116,19 @@ class PersonaController extends Controller
         if ($this->request->isPost) {
             if ($model->load($this->request->post())) {
 
-                if ($model->validate()){
+                if ($model->validate()) {
 
                     $idgradomilitar = $model->idGradoMilitar;
                     $ultimaunidad = $model->ultimaUnidad;
 
                     $user = $model->signup();
-                    if ($user){
+                    if ($user) {
 
                         $ok = Yii::$app->getUser()->login($user, 0);
                         $model->save();
 
                         $modelmilitar = Informacionmilitar::findOne(['idPersona' => $model->id]);
-                        if ($modelmilitar == null){
+                        if ($modelmilitar == null) {
                             $modelmilitar = new Informacionmilitar();
                             $modelmilitar->idPersona = $model->id;
                         }
@@ -162,26 +165,26 @@ class PersonaController extends Controller
         $model->retypePassword = "12345678";
 
         $modelmilitar = Informacionmilitar::findOne(['idPersona' => $model->id]);
-        if ($modelmilitar != null){
+        if ($modelmilitar != null) {
             $model->idGradoMilitar = $modelmilitar->idGradoMilitar;
             $model->ultimaUnidad = $modelmilitar->ultimaUnidad;
         }
 
         if ($this->request->isPost && $model->load($this->request->post())) {
-            
+
             $idgradomilitar = $model->idGradoMilitar;
             $ultimaunidad = $model->ultimaUnidad;
             $model->save();
 
             $modelmilitar = Informacionmilitar::findOne(['idPersona' => $model->id]);
-            if ($modelmilitar == null){
+            if ($modelmilitar == null) {
                 $modelmilitar = new Informacionmilitar();
                 $modelmilitar->idPersona = $model->id;
             }
             $modelmilitar->idGradoMilitar = $idgradomilitar;
             $modelmilitar->ultimaUnidad = $ultimaunidad;
             $modelmilitar->save();
-            
+
             return $this->redirect(['view']);
         }
 
@@ -219,4 +222,44 @@ class PersonaController extends Controller
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
+
+    public function actionGenerarPdf($id)
+    {
+        $model = Persona::findOne(['id' => $id]); // Asegúrate de tener esta función en tu controlador para encontrar el modelo por su ID.
+
+        $searchModel = new DocumentoadjuntoSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams, 1, $model->id, 'Persona');
+
+        // Buscar información laboral del usuario
+        $informacionLaboralModel = Informacionlaboral::findAll(['idPersona' => $model->id]);
+
+        // Buscar información de estudio del usuario
+        $informacionEstudioModel = Informacionestudio::findAll(['idPersona' => $model->id]);
+
+
+        $content = $this->renderPartial('print', [
+            'model' => $model,
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+            'informacionLaboralModel' => $informacionLaboralModel,
+            'informacionEstudioModel' => $informacionEstudioModel,
+        ]);
+
+        $pdf = new Pdf([
+            'content' => $content,
+            'options' => [
+                'title' => 'Hoja de vida-' . $model->primerNombre, // Título del documento PDF
+            ],
+        ]);
+
+        return $pdf->render();
+        // return   $this->render('print', [
+        //     'model' => $model,
+        //     'searchModel' => $searchModel,
+        //     'dataProvider' => $dataProvider,
+        //     'informacionLaboralModel' => $informacionLaboralModel,
+        //     'informacionEstudioModel' => $informacionEstudioModel,
+        // ]);
+    }
+
 }

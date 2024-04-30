@@ -10,6 +10,8 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\web\UploadedFile;
 
+use frontend\models\Informacionestudio;
+
 /**
  * DocumentoadjuntoController implements the CRUD actions for Documentoadjunto model.
  */
@@ -134,9 +136,13 @@ class DocumentoadjuntoController extends Controller
                             return $this->redirect(['/micuenta/persona/view']);
                             break;
                         case 'Informacionestudio':
+
+                            $modelestudio = Informacionestudio::findOne(['id' => $model->idEntidad]);
+                            $modelestudio->idAdjunto = $model->id;
+                            $modelestudio->save();
+
                             return $this->redirect([
-                                '/hojavida/informacionestudio/view',
-                                'id' => $model->idEntidad
+                                '/hojavida/informacionestudio/index'
                             ]);
                             break;
                     }

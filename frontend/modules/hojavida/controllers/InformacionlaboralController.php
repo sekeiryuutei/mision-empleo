@@ -3,19 +3,19 @@
 namespace frontend\modules\hojavida\controllers;
 
 use Yii;
-use frontend\models\Informacionestudio;
-use frontend\models\search\InformacionestudioSearch;
+use common\models\Persona;
+use frontend\models\Informacionlaboral;
+use frontend\models\search\InformacionlaboralSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use common\models\Persona;
 
 use yii\widgets\ActiveForm;
 
 /**
- * InformacionestudioController implements the CRUD actions for Informacionestudio model.
+ * InformacionlaboralController implements the CRUD actions for Informacionlaboral model.
  */
-class InformacionestudioController extends Controller
+class InformacionlaboralController extends Controller
 {
     /**
      * @inheritDoc
@@ -36,7 +36,7 @@ class InformacionestudioController extends Controller
     }
 
     /**
-     * Lists all Informacionestudio models.
+     * Lists all Informacionlaboral models.
      *
      * @return string
      */
@@ -45,9 +45,9 @@ class InformacionestudioController extends Controller
         $username = Yii::$app->user->identity->username;
         $persona = Persona::findOne(['username' => $username]);
 
-        $searchModel = new InformacionestudioSearch();
+        $searchModel = new InformacionlaboralSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
-
+        
         //para que solo me retorne la informacion del usuario logeado
         $dataProvider->query->andWhere(['idPersona' => $persona->id]);
 
@@ -58,7 +58,7 @@ class InformacionestudioController extends Controller
     }
 
     /**
-     * Displays a single Informacionestudio model.
+     * Displays a single Informacionlaboral model.
      * @param int $id ID
      * @return string
      * @throws NotFoundHttpException if the model cannot be found
@@ -71,16 +71,16 @@ class InformacionestudioController extends Controller
     }
 
     /**
-     * Creates a new Informacionestudio model.
+     * Creates a new Informacionlaboral model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return string|\yii\web\Response
      */
     public function actionCreate()
     {
+        $model = new Informacionlaboral();
+        
         $username = Yii::$app->user->identity->username;
         $persona = Persona::findOne(['username' => $username]);
-
-        $model = new Informacionestudio();
 
         if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
             Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
@@ -90,6 +90,7 @@ class InformacionestudioController extends Controller
         $model->idPersona = $persona->id;
 
         if ($this->request->isPost) {
+
             if ($model->load($this->request->post()) && $model->save()) {
                 return $this->redirect(['index']);
             }
@@ -105,7 +106,7 @@ class InformacionestudioController extends Controller
     }
 
     /**
-     * Updates an existing Informacionestudio model.
+     * Updates an existing Informacionlaboral model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param int $id ID
      * @return string|\yii\web\Response
@@ -120,11 +121,6 @@ class InformacionestudioController extends Controller
             return ActiveForm::validate($model);
         }
 
-        if ($model->graduado == '1') {
-            // Si el usuario no graduado, establece la fecha como null
-            $model->fecha = null;
-        }
-
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
             return $this->redirect(['index']);
         }
@@ -136,26 +132,8 @@ class InformacionestudioController extends Controller
         }
     }
 
-    // public function actionUpload($id)
-    // {
-    //     $model = $this->findModel($id);
-
-    //     if ($model->graduado == '1') {
-    //         // Si el usuario no graduado, establece la fecha como null
-    //         $model->fecha = null;
-    //     }
-
-    //     if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-    //         return $this->redirect(['view', 'id' => $model->id]);
-    //     }
-
-    //     return $this->render('upload', [
-    //         'model' => $model,
-    //     ]);
-    // }
-
     /**
-     * Deletes an existing Informacionestudio model.
+     * Deletes an existing Informacionlaboral model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param int $id ID
      * @return \yii\web\Response
@@ -169,15 +147,15 @@ class InformacionestudioController extends Controller
     }
 
     /**
-     * Finds the Informacionestudio model based on its primary key value.
+     * Finds the Informacionlaboral model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param int $id ID
-     * @return Informacionestudio the loaded model
+     * @return Informacionlaboral the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Informacionestudio::findOne(['id' => $id])) !== null) {
+        if (($model = Informacionlaboral::findOne(['id' => $id])) !== null) {
             return $model;
         }
 

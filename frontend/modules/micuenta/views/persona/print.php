@@ -60,7 +60,7 @@ $this->params['breadcrumbs'][] = $this->title;
 $attributes = [
     [
         'group' => true,
-        'label' => 'SECCIÓN 1: INFORMACIÓN DATOS PERSONALES',
+        'label' => 'INFORMACIÓN DATOS PERSONALES',
         'rowOptions' => ['class' => 'table-info']
     ],
     [
@@ -144,7 +144,7 @@ $attributes = [
 
     [
         'group' => true,
-        'label' => 'SECCIÓN 2: INFORMACIÓN UBICACIÓN',
+        'label' => 'INFORMACIÓN UBICACIÓN',
         'rowOptions' => ['class' => 'table-info']
     ],
     [
@@ -179,7 +179,7 @@ $attributes = [
 
     [
         'group' => true,
-        'label' => 'SECCIÓN 3: INFORMACIÓN MILITAR',
+        'label' => 'INFORMACIÓN MILITAR',
         'rowOptions' => ['class' => 'table-info']
     ],
     [
@@ -205,7 +205,7 @@ $attributes = [
 
     [
         'group' => true,
-        'label' => 'SECCIÓN 4: INFORMACIÓN CUENTA',
+        'label' => 'INFORMACIÓN CUENTA',
         'rowOptions' => ['class' => 'table-info']
     ],
     [
@@ -230,67 +230,212 @@ $attributes = [
     ],
 ];
 ?>
+<h3>Hoja de vida</h3>
 
-<div class="persona-view">
+<?= Html::tag('hr', '', ['class' => 'horizontal-line']) ?>
 
-    <div class="row">
-        <div class="col-lg-4 derecha">
-            <?= Html::a(
-                'Actualizar',
-                ['update'],
-                ['class' => 'btn btn-success btn-lg btn-create', 'id' => 'modalButtonCreate']
-            ) ?>
+<div class="card">
+    <div class="card-body">
+        <?=
+            DetailView::widget([
+                'formatter' => ['class' => 'yii\i18n\Formatter', 'nullDisplay' => '-'],
+                'options' => ['style' => 'font-size:14px;'],
+                'model' => $model,
+                'attributes' => $attributes,
+                'mode' => DetailView::MODE_VIEW,
+                'bordered' => true,
+                'striped' => true,
+                'condensed' => true,
+                'responsive' => true,
+                'hover' => true,
+                'hAlign' => 'left',
+                'vAlign' => 'top',
+            ]);
+        ?>
 
-        </div>
-
-        <div class="col-lg-4 centrar">
-            <?= Html::a(
-                'Subir Documentos',
-                ['/gestiondocumental/documentoadjunto/create', 'idproyecto' => 1, 'identidad' => $model->id, 'modulo' => 'Persona'],
-                ['class' => 'btn btn-success btn-lg btn-create', 'id' => 'modalButtonUpload']
-            ) ?>
-
-        </div>
-
-        <div class="col-lg-4 izquierda">
-            <?= Html::a('Imprimir Hoja Vida', ['generar-pdf', 'id' => $model->id], ['class' => 'btn btn-success btn-lg btn-create']) ?>
-
-            <!-- <?= Html::a(
-                'Imprimir Hoja Vida',
-                ['/gestiondocumental/documentoadjunto/create', 'idproyecto' => 1, 'identidad' => $model->id, 'modulo' => 'Persona'],
-                ['class' => 'btn btn-success btn-lg btn-create', 'id' => 'modalButtonUpload']
-            ) ?> -->
-
-        </div>
-    </div>
-
-    <?= Html::tag('hr', '', ['class' => 'horizontal-line']) ?>
-
-    <div class="card">
-        <div class="card-body">
-
-            <?=
-                DetailView::widget([
-                    'formatter' => ['class' => 'yii\i18n\Formatter', 'nullDisplay' => '-'],
-                    'options' => ['style' => 'font-size:14px;'],
-                    'model' => $model,
-                    'attributes' => $attributes,
-                    'mode' => DetailView::MODE_VIEW,
-                    'bordered' => true,
-                    'striped' => true,
-                    'condensed' => true,
-                    'responsive' => true,
-                    'hover' => true,
-                    'hAlign' => 'left',
-                    'vAlign' => 'top',
-                ]);
+        <!-- Información Laboral -->
+        <?php if (!empty($informacionLaboralModel)): ?>
+            <?php
+            // Definir el grupo de sección fuera del bucle
+            $attributeslaboralModel = [
+                [
+                    'group' => true,
+                    'label' => 'INFORMACIÓN LABORAL',
+                    'rowOptions' => ['class' => 'table-info']
+                ],
+            ];
             ?>
-        </div>
+            <?php foreach ($informacionLaboralModel as $laboralModel): ?>
+                <?php
+                // Agregar los atributos específicos de cada modelo dentro del bucle
+                $attributeslaboralModel[] = [
+                    'columns' => [
+                        [
+                            'attribute' => 'nombreEmpresa',
+                            'label' => 'Nombre de la empresa',
+                            'displayOnly' => true,
+                            'labelColOptions' => ['style' => 'width:15%'],
+                            'valueColOptions' => ['style' => 'width:35%'],
+                            'value' => $laboralModel->nombreEmpresa,
+                        ],
+                        [
+                            'attribute' => 'nombreCargo',
+                            'label' => 'Nombre del cargo',
+                            'displayOnly' => true,
+                            'labelColOptions' => ['style' => 'width:15%'],
+                            'valueColOptions' => ['style' => 'width:35%'],
+                            'value' => $laboralModel->nombreCargo,
+                        ],
+                    ],
+                ];
+                $attributeslaboralModel[] = [
+                    'columns' => [
+                        [
+                            'attribute' => 'fechaDesde',
+                            'label' => 'Inicio',
+                            'displayOnly' => true,
+                            'labelColOptions' => ['style' => 'width:15%'],
+                            'valueColOptions' => ['style' => 'width:35%'],
+                            'value' => $laboralModel->fechaDesde,
+                        ],
+                        [
+                            'attribute' => 'fechaHasta',
+                            'label' => 'Finalizo',
+                            'displayOnly' => true,
+                            'labelColOptions' => ['style' => 'width:15%'],
+                            'valueColOptions' => ['style' => 'width:35%'],
+                            'value' => $laboralModel->fechaHasta,
+                        ],
+                    ],
+                ];
+                ?>
+            <?php endforeach; ?>
+
+            <?= DetailView::widget([
+                'formatter' => ['class' => 'yii\i18n\Formatter', 'nullDisplay' => '-'],
+                'options' => ['style' => 'font-size:8px;'],
+                'model' => $laboralModel,
+                'attributes' => $attributeslaboralModel,
+                'mode' => DetailView::MODE_VIEW,
+                'bordered' => true,
+                'striped' => true,
+                'condensed' => true,
+                'responsive' => true,
+                'hover' => true,
+                'hAlign' => 'left',
+                'vAlign' => 'top',
+            ]); ?>
+
+        <?php else: ?>
+            <p>No se encontró información laboral.</p>
+        <?php endif; ?>
+
+        <!-- Información de Estudio -->
+
+        <?php if (!empty($informacionEstudioModel)): ?>
+            <?php
+            // Definir el grupo de sección fuera del bucle
+            $attributesEstudioModel = [
+                [
+                    'group' => true,
+                    'label' => 'INFORMACIÓN ESTUDIOS',
+                    'rowOptions' => ['class' => 'table-info']
+                ],
+            ];
+            ?>
+            <?php foreach ($informacionEstudioModel as $estudioModel): ?>
+                <?php
+                // Definir los atributos específicos de cada modelo dentro del bucle
+                $attributesEstudioModel[] = [
+                    'columns' => [
+                        [
+                            'attribute' => 'tituloObtenido',
+                            'label' => 'Título',
+                            'displayOnly' => true,
+                            'labelColOptions' => ['style' => 'width:5%'],
+                            'valueColOptions' => ['style' => 'width:35%'],
+                            'value' => $estudioModel->tituloObtenido,
+                        ],
+                        [
+                            'attribute' => 'nombreInstitucion',
+                            'label' => 'Nombre de la institución',
+                            'displayOnly' => true,
+                            'labelColOptions' => ['style' => 'width:20%'],
+                            'valueColOptions' => ['style' => 'width:40%'],
+                            'value' => $estudioModel->nombreInstitucion,
+                        ],
+                    ],
+                ];
+                $attributesEstudioModel[] = [
+                    'columns' => [
+                        [
+                            'attribute' => 'idNivelAcademico',
+                            'label' => 'Nivel academico',
+                            'displayOnly' => true,
+                            'labelColOptions' => ['style' => 'width:15%'],
+                            'valueColOptions' => ['style' => 'width:25%'],
+                            'value' => $estudioModel->nivelAcademico->nombre,
+                        ],
+                        [
+                            'attribute' => 'Graduado',
+                            'label' => 'Graduado',
+                            'displayOnly' => true,
+                            'labelColOptions' => ['style' => 'width:10%'],
+                            'valueColOptions' => ['style' => 'width:10%'],
+                            'value' => $estudioModel->graduado ? 'Sí' : 'No',
+                        ],
+                        [
+                            'attribute' => 'fecha',
+                            'label' => 'fecha de grado',
+                            'displayOnly' => true,
+                            'labelColOptions' => ['style' => 'width:17%'],
+                            'valueColOptions' => ['style' => 'width:43%'],
+                            'value' => $estudioModel->fecha  ? $estudioModel->fecha : 'Sin culminar',
+                        ],
+                    ],
+                ];
+                ?>
+            <?php endforeach; ?>
+
+            <?= DetailView::widget([
+                'formatter' => ['class' => 'yii\i18n\Formatter', 'nullDisplay' => '-'],
+                'options' => ['style' => 'font-size:8px;'],
+                'model' => $estudioModel, // Puedes usar $estudioModel o cualquier otro modelo relacionado
+                'attributes' => $attributesEstudioModel,
+                // 'attributes' => [
+        
+                //     'idNivelAcademico',
+                //     [
+                //         'label' => 'idNivelAcademico',
+                //         'value' => $estudioModel->nivelAcademico->nombre, // Suponiendo que 'graduado' es un campo booleano
+                //     ],
+                //     [
+                //         'label' => 'Graduado',
+                //         'value' => $estudioModel->graduado ? 'Sí' : 'No', // Suponiendo que 'graduado' es un campo booleano
+                //     ],
+                //     'fecha',
+                // ],
+                'mode' => DetailView::MODE_VIEW,
+                'bordered' => true,
+                'striped' => true,
+                'condensed' => true,
+                'responsive' => true,
+                'hover' => true,
+                'hAlign' => 'left',
+                'vAlign' => 'top',
+            ]); ?>
+
+        <?php else: ?>
+            <p>No se encontró información de estudio.</p>
+        <?php endif; ?>
+
+
     </div>
+</div>
 
 </div>
 
-<div class="card-header text-center titulo-seccion-FAA">
+<!-- <div class="card-header text-center titulo-seccion-FAA">
     <strong>
         <h5>RELACIÓN DOCUMENTOS SOPORTE</h5>
     </strong>
@@ -395,4 +540,4 @@ $attributes = [
     
         ],
     ]); ?>
-</div>
+</div> -->

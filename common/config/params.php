@@ -11,9 +11,9 @@ return [
     'user.passwordResetTokenExpire' => 3600,
     'user.passwordMinLength' => 8,
 
-    'rutadctos_WIN' => 'C:\Apache24\htdocs\gestiondocumental',
+    'rutadctos_WIN' => 'C:\laragon\www\gestiondocumental',
     'rutadctos_LINUX' => '/var/www/html/gestiondocumental',
 
     //'domainName' => 'http://gussolutions.com/gestiondocumental/',
-    'domainName' => 'http://localhost/gestiondocumental/',
+    'domainName' => 'http://localhost:8082/gestiondocumental/',
 ];

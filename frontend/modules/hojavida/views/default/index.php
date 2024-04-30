@@ -20,7 +20,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
         <div class="row">
             <div class="col-lg-4">
-                <h2>Datos personales basicos</h2>
+                <h2>Datos personales</h2>
 
                 <p>
                     En esta sección, puedes mantener tus datos personales actualizados para garantizar que los
@@ -61,7 +61,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 </p>
 
                 <p>
-                    <a class="btn btn-outline-secondary" href="https://www.yiiframework.com/extensions/">
+                    <a class="btn btn-outline-secondary" href="<?= Url::to(['/hojavida/informacionlaboral']) ?>/">
                         Actualizar &raquo;
                     </a>
                 </p>

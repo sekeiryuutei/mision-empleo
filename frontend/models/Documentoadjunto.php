@@ -70,15 +70,27 @@ class Documentoadjunto extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['codigoModulo', 'idEntidad', 'idProyecto','descripcion', 'idTipoDocumentoAdjunto', 'src_filename', 
-            'web_filename', 'path_filename'], 'required', 'message' => 'El Campo {attribute} Es un Valor Obligatorio'],
+            [
+                [
+                    'codigoModulo',
+                    'idEntidad',
+                    'idProyecto',
+                    'descripcion',
+                    'idTipoDocumentoAdjunto',
+                    'src_filename',
+                    'web_filename',
+                    'path_filename'
+                ],
+                'required',
+                'message' => 'El Campo {attribute} Es un Valor Obligatorio'
+            ],
             [['idEntidad', 'idTipoDocumentoAdjunto', 'created_by', 'updated_by'], 'integer'],
             [['created_at', 'updated_at', 'tags'], 'safe'],
             [['codigoModulo', 'extension'], 'string', 'max' => 30],
 
             [['image'], 'safe'],
-            [['image'], 'file', 'extensions'=>'jpg, gif, png, pdf, xlsx, docx, pptx'],
-            [['image'], 'file', 'maxSize'=>'5000000'],
+            [['image'], 'file', 'extensions' => 'jpg, gif, png, pdf, xlsx, docx, pptx'],
+            [['image'], 'file', 'maxSize' => '5000000'],
 
             [['descripcion', 'src_filename', 'web_filename', 'path_filename', 'path_server'], 'string', 'max' => 255],
             [['idTipoDocumentoAdjunto'], 'exist', 'skipOnError' => true, 'targetClass' => Tipodocumentoadjunto::class, 'targetAttribute' => ['idTipoDocumentoAdjunto' => 'id']],
@@ -116,18 +128,28 @@ class Documentoadjunto extends \yii\db\ActiveRecord
         return $this->hasOne(Tipodocumentoadjunto::class, ['id' => 'idTipoDocumentoAdjunto']);
     }
 
-    public static function dataEntidad ($codigoModulo, $idEntidad){
+    public static function dataEntidad($codigoModulo, $idEntidad)
+    {
         $modelentidad = new Entidad();
 
-        switch ($codigoModulo){
-            case "Persona": 
+        switch ($codigoModulo) {
+            case "Persona":
                 $model = Persona::findOne(['id' => $idEntidad]);
                 $modelentidad->id = $idEntidad;
-                $modelentidad->codigo = $model->documento. '-' . $model->id;
-                $modelentidad->nombre = $model->primerNombre . ' '  . $model->segundoNombre . ' ' . $model->primerApellido . ' ' . $model->segundoApellido;
+                $modelentidad->codigo = $model->documento . '-' . $model->id;
+                $modelentidad->nombre = $model->primerNombre . ' ' . $model->segundoNombre . ' ' . $model->primerApellido . ' ' . $model->segundoApellido;
                 $modelentidad->fecha = $model->created_at;
-                $modelentidad->descripcion = $model->ciudadresidencia->nombre . ' - ' . $model->sexo->nombre . ' - ' .  $model->nivelestudio->nombre;
-                break; 
+                $modelentidad->descripcion = $model->ciudadresidencia->nombre . ' - ' . $model->sexo->nombre . ' - ' . $model->nivelestudio->nombre;
+                break;
+            case "Informacionestudio":
+                $model = Informacionestudio::findOne(['id' => $idEntidad]);
+                $modelentidad->id = $idEntidad;
+                $modelentidad->codigo = $model->persona->documento . '-' . $model->id;
+                $modelentidad->nombre = $model->persona->primerNombre . ' ' . $model->persona->segundoNombre . ' ' . $model->persona->primerApellido . ' ' . $model->persona->segundoApellido;
+                $modelentidad->fecha = $model->fecha;
+                $modelentidad->descripcion = $model->tituloObtenido . ' - ' . $model->nombreInstitucion . ' - ' . $model->nivelAcademico->nombre;
+                break;
+
         }
 
         return $modelentidad;

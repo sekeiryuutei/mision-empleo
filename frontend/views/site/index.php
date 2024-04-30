@@ -1,6 +1,7 @@
 <?php
 use yii\helpers\Url;
 
+
 /** @var yii\web\View $this */
 
 $this->title = 'Mision empleo';
@@ -17,7 +18,7 @@ $this->title = 'Mision empleo';
                 fin de impulsar su desarrollo y crecimiento profesional..
             </p>
 
-            <p><a class="btn btn-lg btn-success" href="<?= Url::to(['/hojavida']) ?>">Hoja de vida</a>
+            <p><a class="btn btn-lg btn-primary" href="<?= Url::to(['/hojavida']) ?>">Hoja de vida</a>
             </p>
         </div>
     </div>
@@ -35,7 +36,7 @@ $this->title = 'Mision empleo';
                     da el primer paso hacia tu próximo desafío profesional!
                 </p>
 
-                <p><a class="btn btn-outline-secondary" href="https://www.yiiframework.com/doc/">Ver
+                <p><a class="btn btn-outline-info" href="https://www.yiiframework.com/doc/">Ver
                         &raquo;</a></p>
 
             </div>
@@ -49,7 +50,7 @@ $this->title = 'Mision empleo';
                     oportunidad perfecta para avanzar en tu carrera.
                 </p>
 
-                <p><a class="btn btn-outline-secondary" href="https://www.yiiframework.com/forum/">Ver&raquo;</a>
+                <p><a class="btn btn-outline-info" href="https://www.yiiframework.com/forum/">Ver&raquo;</a>
                 </p>
             </div>
             <div class="col-lg-4">
@@ -62,7 +63,7 @@ $this->title = 'Mision empleo';
                     para apoyarte en cada paso del camino hacia el éxito laboral.
                 </p>
 
-                <p><a class="btn btn-outline-secondary" href="https://www.yiiframework.com/extensions/">Ver
+                <p><a class="btn btn-outline-info" href="https://www.yiiframework.com/extensions/">Ver
                         &raquo;</a></p>
             </div>
         </div>

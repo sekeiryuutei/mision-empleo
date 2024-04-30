@@ -66,7 +66,7 @@ class Informacionestudio extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['idPersona', 'tituloObtenido', 'idNivelAcademico', 'nombreInstitucion'], 'required'],
+            [['idPersona', 'tituloObtenido', 'idNivelAcademico', 'nombreInstitucion'], 'required', 'message' => '{attribute} Es Un Valor Obligatorio'],
             [['idPersona', 'idNivelAcademico', 'graduado', 'idAdjunto', 'created_by', 'updated_by'], 'integer'],
             [['fecha', 'created_at', 'updated_at',], 'safe'],
             [['tituloObtenido', 'nombreInstitucion'], 'string', 'max' => 100],
@@ -125,5 +125,10 @@ class Informacionestudio extends \yii\db\ActiveRecord
     public function getPersona()
     {
         return $this->hasOne(Persona::class, ['id' => 'idPersona']);
+    }
+
+    public function getDocumentoadjunto()
+    {
+        return $this->hasOne(Documentoadjunto::class, ['id' => 'idAdjunto']);
     }
 }
